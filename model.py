@@ -7,6 +7,7 @@ from sklearn.ensemble import RandomForestClassifier
 import xgboost as xgb
 import pickle
 
+filepath = "C:\\Users\\KIIT\\Desktop\\PROJECTS\\FRAUD DETECTION\\modified_Fraud.csv"
 def load_data(filepath):
     df = pd.read_csv(filepath)
     df.replace({'type':{'CASH_OUT':1, 'PAYMENT':2, 'CASH_IN':3, 'TRANSFER':4, 'DEBIT':5}}, inplace=True)
