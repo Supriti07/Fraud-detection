@@ -11,12 +11,24 @@ uploaded_file = st.file_uploader("Upload a CSV file", type="csv")
 
 if uploaded_file is not None:
     # Save uploaded file to a temporary location
-    with open(os.path.join("temp", uploaded_file.name), "wb") as f:
+    temp_filepath = os.path.join("temp", uploaded_file.name)
+    with open(temp_filepath, "wb") as f:
         f.write(uploaded_file.getvalue())
 
-    data = load_data(os.path.join("temp", uploaded_file.name))
-    st.write("Data Preview:")
-    st.dataframe(data.head())
+    if os.path.exists(temp_filepath):
+        st.write("File saved to temporary location:", temp_filepath)
+    else:
+        st.error("Error: Failed to save file to temporary location")
+        st.stop()  # Stop the script execution if the file is not saved successfully
+
+    # Load data
+    try:
+        data = load_data(temp_filepath)
+        st.write("Data Preview:")
+        st.dataframe(data.head())
+    except Exception as e:
+        st.error(f"Error loading data: {e}")
+        st.stop()  # Stop the script execution if there's an error loading the data
 
     x_train, x_test, y_train, y_test = preprocess_data(data)
 
