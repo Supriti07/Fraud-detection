@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 from model import load_data, preprocess_data, train_decision_tree, train_random_forest, train_xgboost, save_model, load_model
 from sklearn.metrics import accuracy_score, classification_report
+import os
 
 st.title('Fraud Detection Model Training and Evaluation')
 
@@ -9,7 +10,11 @@ st.title('Fraud Detection Model Training and Evaluation')
 uploaded_file = st.file_uploader("Upload a CSV file", type="csv")
 
 if uploaded_file is not None:
-    data = load_data(uploaded_file)
+    # Save uploaded file to a temporary location
+    with open(os.path.join("temp", uploaded_file.name), "wb") as f:
+        f.write(uploaded_file.getvalue())
+
+    data = load_data(os.path.join("temp", uploaded_file.name))
     st.write("Data Preview:")
     st.dataframe(data.head())
 
