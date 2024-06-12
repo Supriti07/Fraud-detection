@@ -15,6 +15,10 @@ def load_data(filepath):
     df.columns = df.columns.str.replace('\u00A0', '')
     columns_to_drop = ['nameOrig', 'nameDest', 'isFlaggedFraud']
     df = df.drop(columns_to_drop, axis=1)
+    
+    # Handle missing values in the target variable
+    df['isFraud'].fillna(df['isFraud'].mean(), inplace=True)
+    
     return df
 
 def preprocess_data(df):
